@@ -5,6 +5,8 @@
 #' @export
 
 runAnalysis <- function(data_dir = "/4ceData/Input",dateFormat="%d-%b-%y") {
+    
+    for (r_file in list.files('/covidclinical/Phase2.1MissingRPackage/helpers', full.names = TRUE, pattern = '.R$')) source(r_file)
 
     ## make sure this instance has the latest version of the quality control and data wrangling code available
     devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
