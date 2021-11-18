@@ -1,8 +1,33 @@
-
-#' Runs the analytic workflow for the Missing project
+#' Run analysis
+#'
+#' @return NULL. Result files are written out to the `getProjectOutputDirectory()` directory.
 #'
 #' @keywords 4CE
-#' @export
+#' @export(getPrivateSummaryRepositoryUrl)
+#' @export(getProjectOutputDirectory)
+#' @export(getPublicSummaryRepositoryUrl)
+#' @export(runAnalysis)
+#' @export(smallCountObfuscation)
+#' @export(submitAnalysis)
+#' @export(validateAnalysis)
+#' @import(dplyr)
+#' @import(tidyverse)
+#' @import(DT)
+#' @import(naniar)
+#' @import(cowplot)
+#' @import(ggridges)
+#' @import(RColorBrewer)
+#' @import(mSTEM)
+#' @import(Rcpp)
+#' @import(matrixStats)
+#' @import(lubridate)
+#' @import(stm)
+#' @import(beepr)
+#' @import(RcppRoll)
+#' @import(mSTEM)
+#' @import(MCMCpack)
+#' @import(kableExtra)
+#'
 
 
  
