@@ -28,7 +28,6 @@
 #' @import(mSTEM)
 #' @import(MCMCpack)
 #' @import(kableExtra)
-#'
 
 
  
@@ -58,12 +57,12 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
     )
   
   #Read in thrombotic icd codes. Add column "truncated code" for first three characters of each code. Extract unique truncated codes. 
-  thrombo_codes <- read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
+  thrombo_codes <- readr::read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
     mutate(truncated_code = substr(icd_code, 1, 3)) %>%
     pull(truncated_code) %>%
     unique()
   #Extract information for patients with codes for thrombotic events
-  patient_obs <- read_csv(
+  patient_obs <- readr::read_csv(
     file.path(data_dir, "LocalPatientObservations.csv"),
     col_types = list(patient_num = readr::col_character()),
     na = "-999"
@@ -81,8 +80,8 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
       col_types = list(patient_num = readr::col_character())
     )
   
-  lab_mapping <- read_csv("public-data/loinc-map.csv")
-  lab_bounds <- read_csv("public-data/lab_bounds.csv")
+  lab_mapping <- readr::read_csv("public-data/loinc-map.csv")
+  lab_bounds <- readr::read_csv("public-data/lab_bounds.csv")
   lab_names <- lab_bounds$short_name
   
   if (time == "phase_1") {
@@ -232,8 +231,8 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
   
   
   
-  lab_mapping <- read_csv("public-data/loinc-map.csv")
-  lab_bounds <- read_csv("public-data/lab_bounds.csv")
+  lab_mapping <- readr::read_csv("public-data/loinc-map.csv")
+  lab_bounds <- readr::read_csv("public-data/lab_bounds.csv")
   lab_names <- lab_bounds$short_name
   
   
@@ -1914,7 +1913,7 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
   
   
   #Read in thrombotic icd codes. Add column "truncated code" for first three characters of each code. Extract unique truncated codes.
-  thrombo_codes <- read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
+  thrombo_codes <- readr::read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
     mutate(truncated_code = substr(icd_code, 1, 3)) %>%
     pull(truncated_code) %>%
     unique()
@@ -2651,7 +2650,7 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
   ####### Generate Table 1
   
   
-  thrombo_codes <- read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
+  thrombo_codes <- readr::read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
     mutate(truncated_code = substr(icd_code, 1, 3)) %>%
     pull(truncated_code) %>%
     unique()
