@@ -57,10 +57,8 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
     )
   
   #Read in thrombotic icd codes. Add column "truncated code" for first three characters of each code. Extract unique truncated codes. 
-  thrombo_codes <- readr::read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
-    mutate(truncated_code = substr(icd_code, 1, 3)) %>%
-    pull(truncated_code) %>%
-    unique()
+  thrombo_codes <- c("I74", "I75", "I76", "I21", "I22", "I23", "I26", "I27", "Z86", "I63", "I67", "I81", "I82","444","445",
+"410","415","V12","434","437","452","453","D65","P60","286","776")
   #Extract information for patients with codes for thrombotic events
   patient_obs <- readr::read_csv(
     file.path(data_dir, "LocalPatientObservations.csv"),
@@ -1913,10 +1911,8 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
   
   
   #Read in thrombotic icd codes. Add column "truncated code" for first three characters of each code. Extract unique truncated codes.
-  thrombo_codes <- readr::read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
-    mutate(truncated_code = substr(icd_code, 1, 3)) %>%
-    pull(truncated_code) %>%
-    unique()
+  thrombo_codes <- c("I74", "I75", "I76", "I21", "I22", "I23", "I26", "I27", "Z86", "I63", "I67", "I81", "I82","444","445",
+"410","415","V12","434","437","452","453","D65","P60","286","776")
   #Generate list of neuro codes (obtained from neuro group)
   neuro_codes <- c("R41","R27","R42","G44","G03","G04","G72","M60","G61","G65","R43","G93","F29","G40","G45","G46","I60","I61","I62","I67","H54","40","298","307","320","321","322","323","330","331","339","345","348","357","359","369","430","431","432")
   ARDs_codes <- c("J80","518")
@@ -2650,10 +2646,8 @@ runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time=
   ####### Generate Table 1
   
   
-  thrombo_codes <- readr::read_csv("https://raw.githubusercontent.com/covidclinical/Phase2.1AKIRPackage/ac19716a4586f45c398728fcd821ca9d5baffe45/FourCePhase2.1AKI/data-raw/thromb_icd_code.csv") %>%
-    mutate(truncated_code = substr(icd_code, 1, 3)) %>%
-    pull(truncated_code) %>%
-    unique()
+  thrombo_codes <- c("I74", "I75", "I76", "I21", "I22", "I23", "I26", "I27", "Z86", "I63", "I67", "I81", "I82","444","445",
+"410","415","V12","434","437","452","453","D65","P60","286","776")
   
   #Generate list of neuro codes (obtained from neuro group)
   
