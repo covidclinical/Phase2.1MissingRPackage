@@ -13,6 +13,7 @@ License: `use_mit_license()`, `use_gpl3_license()` or friends to
 Imports:
   tidyr (>= 1.1.0),
   tidyverse,
+  readr,
   DT,
   naniar,
   cowplot,
