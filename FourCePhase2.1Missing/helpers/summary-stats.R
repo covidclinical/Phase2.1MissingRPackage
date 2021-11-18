@@ -104,8 +104,7 @@ get_tables <- function(
                                         'age_group',
                                         'race',
                                         'Severity',
-                                        'Survival',
-                                        'readmitted')) {
+                                        'Survival')) {
   
   # total_patients <- length(unique(demo_df$patient_num))
   demo_obfus_table <- lapply(
