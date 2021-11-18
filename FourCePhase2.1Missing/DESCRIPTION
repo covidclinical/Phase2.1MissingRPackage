@@ -12,8 +12,18 @@ License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Imports:
   tidyr (>= 1.1.0),
+  readr (>= 1.4.0),
+  forcats (>= 0.5.0),
+  tibble (>= 3.0.4),
+  dplyr (>= 1.0.0),
+  purrr (>= 0.3.4),
+  remotes (>= 2.2.0),
+  stringr (>= 1.4.0),
+  lubridate (>= 1.7.4),
+  broom (>= 0.7.0),
+  logisticPCA (>= 0.2.0),
+  survival (>= 3.2)
   tidyverse,
-  readr,
   DT,
   naniar,
   cowplot,
