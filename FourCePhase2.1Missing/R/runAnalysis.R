@@ -13,6 +13,7 @@
 #' @import(dplyr)
 #' @import(tidyverse)
 #' @import(readr)
+#' @import(Rcpp)
 #' @import(DT)
 #' @import(naniar)
 #' @import(cowplot)
