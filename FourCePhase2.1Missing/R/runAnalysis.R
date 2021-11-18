@@ -11,6 +11,7 @@
 #' @export(submitAnalysis)
 #' @export(validateAnalysis)
 #' @import(dplyr)
+#' @import(tidyr)
 #' @import(tidyverse)
 #' @import(readr)
 #' @import(Rcpp)
