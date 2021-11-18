@@ -22,6 +22,7 @@ Imports:
   lubridate (>= 1.7.4),
   broom (>= 0.7.0),
   logisticPCA (>= 0.2.0),
+  Rcpp (>= 1.0.7),
   tidyverse,
   DT,
   naniar,
@@ -38,5 +39,7 @@ Imports:
   kableExtra
 Encoding: UTF-8
 LazyData: true
+Depends:
+   R (>= 4.0.2)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
