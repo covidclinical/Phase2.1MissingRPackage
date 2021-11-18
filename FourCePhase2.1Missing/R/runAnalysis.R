@@ -12,6 +12,7 @@
 #' @export(validateAnalysis)
 #' @import(dplyr)
 #' @import(tidyverse)
+#' @import(readr)
 #' @import(DT)
 #' @import(naniar)
 #' @import(cowplot)
