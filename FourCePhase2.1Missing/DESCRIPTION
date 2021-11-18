@@ -31,7 +31,7 @@ Imports:
   mSTEM,
   matrixStats,
   lubridate,
-  stm,
+  stm (>=1.3.6),
   beepr,
   RcppRoll,
   MCMCpack,
