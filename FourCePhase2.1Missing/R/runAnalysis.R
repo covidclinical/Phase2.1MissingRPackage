@@ -1178,13 +1178,11 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
             indices[ct] = h
           }
         }
-        
-        if (mean(abs(test_vec) > min_corr) > prop_greater) {
-          count = count+1
-          final_names[count] = name1
-          df[,count] = test_vec
-          df_ind[,count] = indices
-        }
+
+         count = count+1
+         final_names[count] = name1
+         df[,count] = test_vec
+         df_ind[,count] = indices
       }
     }
   }
@@ -1255,12 +1253,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
           }
         }
         
-        if (mean(abs(test_vec) > min_corr) > prop_greater) {
-          count = count+1
-          final_names[count] = name1
-          df[,count] = test_vec
-          df_ind[,count] = indices
-        }
+         count = count+1
+         final_names[count] = name1
+         df[,count] = test_vec
+         df_ind[,count] = indices
       }
     }
   }
@@ -1331,12 +1327,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
           }
         }
         
-        if (mean(abs(test_vec) > min_corr) > prop_greater) {
-          count = count+1
-          final_names[count] = name1
-          df[,count] = test_vec
-          df_ind[,count] = indices
-        }
+         count = count+1
+         final_names[count] = name1
+         df[,count] = test_vec
+         df_ind[,count] = indices
       }
     }
   }
