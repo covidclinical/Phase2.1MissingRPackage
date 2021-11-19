@@ -46,9 +46,9 @@ library(FourCePhase2.1Missing)
 data_dir = '/Your directory here /'
 siteid = 'your site id'
 
-runAnalysis_nodocker(dateFormat="%d-%b-%y",time = "phase_1")
-runAnalysis(dateFormat="%d-%b-%y",time = "phase_2")
-runAnalysis(dateFormat="%d-%b-%y",time = "all")
+runAnalysis_nodocker(data_dir,dateFormat="%d-%b-%y",time = "phase_1",siteid)
+runAnalysis(data_dir,dateFormat="%d-%b-%y",time = "phase_2",siteid)
+runAnalysis(data_dir,dateFormat="%d-%b-%y",time = "all",siteid)
 ```
 
 Please send your results files to us via slack if not using the docker image! They will pop up in your working directory.
