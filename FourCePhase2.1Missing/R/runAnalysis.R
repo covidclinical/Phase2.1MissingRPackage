@@ -26,7 +26,6 @@
 #' @import(Rcpp)
 #' @import(matrixStats)
 #' @import(lubridate)
-#' @import(stm)
 #' @import(beepr)
 #' @import(RcppRoll)
 #' @import(mSTEM)
@@ -37,6 +36,7 @@
  
 runAnalysis <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time="all",siteid = "upenn") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
+  library(stm)
   
   my_dir = data_dir
   
