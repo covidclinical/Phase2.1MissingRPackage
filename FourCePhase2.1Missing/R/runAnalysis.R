@@ -36,7 +36,6 @@
  
 runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
-  for (r_file2 in list.files('R/public-data', full.names = TRUE, pattern = '.R$')) source(r_file2)
   install.packages("stm")
   library(stm)
  
@@ -87,9 +86,16 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
       file.path(data_dir, "LocalPatientClinicalCourse.csv"),
       col_types = list(patient_num = readr::col_character())
     )
-  
-  lab_mapping <- readr::read_csv("public-data/loinc-map.csv")
-  lab_bounds <- readr::read_csv("public-data/lab_bounds.csv")
+ 
+  lab_mapping <-
+    readr::read_csv(
+      file.path(data_dir, "lab_mapping.csv"))
+    )
+  lab_bounds <-
+    readr::read_csv(
+      file.path(data_dir, "lab_bounds.csv"))
+    )
+
   lab_names <- lab_bounds$short_name
   
   if (time == "phase_1") {
