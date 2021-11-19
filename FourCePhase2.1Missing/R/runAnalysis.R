@@ -273,7 +273,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   ct = 1
   for (i in 1:length(unique(patient_obs_wide$patient_num))) {
     for (j in 1:ncol(avgs)) {
-      dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+      dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
       if (nrow(dat) != 0){
         num_miss = sum(is.na(dat[j+2]))
         avgs[ct,j] = num_miss
@@ -327,7 +327,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   ct = 1
   for (i in 1:30) {
     for (j in 1:ncol(avgs)) {
-      dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+      dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
       if (nrow(dat) != 0){
         num_miss = sum(is.na(dat[j+2]))
         avgs[ct,j] = num_miss
@@ -382,14 +382,14 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_M = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_F = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_M = which(demo_raw$sex=="male")
-  indices_F = which(demo_raw$sex=="female")
+  indices_M = (demo_raw[which(demo_raw$sex=="male"),])$patient_num
+  indices_F = (demo_raw[which(demo_raw$sex=="female"),])$patient_num
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_M){
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_M){
       
       for (j in 1:ncol(props_M)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_M[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -401,10 +401,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
     }
   }
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_F){
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_F){
       for (j in 1:ncol(props_F)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_F[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -457,14 +457,13 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   #Stratify by severity!
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
+  indices_S = (demo_raw[which(demo_raw$severe==1),])$patient_num
+  indices_NS = (demo_raw[which(demo_raw$severe==0),])$patient_num
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
-      
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
       for (j in 1:ncol(props_S)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -476,10 +475,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
     }
   }
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
       for (j in 1:ncol(props_NS)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -548,14 +547,14 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_M = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_F = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_M = which(demo_raw$sex=="male")
-  indices_F = which(demo_raw$sex=="female")
+  indices_M = (demo_raw[which(demo_raw$sex=="male"),])$patient_num
+  indices_F = (demo_raw[which(demo_raw$sex=="female"),])$patient_num
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_M){
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_M){
       
       for (j in 1:ncol(props_M)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_M[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -568,9 +567,9 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   }
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_F){
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_F){
       for (j in 1:ncol(props_F)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_F[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -623,14 +622,14 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   #Stratify by severity!
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
+  indices_S = (demo_raw[which(demo_raw$severe==1),])$patient_num
+  indices_NS = (demo_raw[which(demo_raw$severe==0),])$patient_num
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
       
       for (j in 1:ncol(props_S)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -643,9 +642,9 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   }
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
       for (j in 1:ncol(props_NS)) {
-        dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+        dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
         if (nrow(dat) != 0){
           num_miss = sum(is.na(dat[j+2]))
           props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -700,17 +699,15 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
-  indices_age = which(demo_raw$age_group != "00to02" & demo_raw$age_group != "03to05" & demo_raw$age_group != "06to11" & demo_raw$age_group != "12to17")
+  indices_age = (demo_raw[which(demo_raw$age_group != "00to02" & demo_raw$age_group != "03to05" & demo_raw$age_group != "06to11" & demo_raw$age_group != "12to17"),])$patient_num
   
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         
         for (j in 1:ncol(props_S)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -723,11 +720,11 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
     }
   }
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         for (j in 1:ncol(props_NS)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -786,17 +783,16 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
-  indices_age = which(demo_raw$age_group != "00to02" & demo_raw$age_group != "03to05" & demo_raw$age_group != "06to11" & demo_raw$age_group != "12to17")
+
+  indices_age = (demo_raw[which(demo_raw$age_group != "00to02" & demo_raw$age_group != "03to05" & demo_raw$age_group != "06to11" & demo_raw$age_group != "12to17"),])$patient_num
   
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         
         for (j in 1:ncol(props_S)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -810,10 +806,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   }
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         for (j in 1:ncol(props_NS)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -869,17 +865,16 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
-  indices_age = which(demo_raw$age_group == "00to02" | demo_raw$age_group == "03to05" | demo_raw$age_group == "06to11" | demo_raw$age_group == "12to17")
+
+  indices_age = (demo_raw[which(demo_raw$age_group == "00to02" | demo_raw$age_group == "03to05" | demo_raw$age_group == "06to11" | demo_raw$age_group == "12to17"),])$patient_num
   
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         
         for (j in 1:ncol(props_S)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -892,11 +887,11 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
     }
   }
   ct = 1
-  for (i in 1:length(as.integer(unique(patient_obs_wide$patient_num)))) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+  for (i in 1:length(unique(patient_obs_wide$patient_num))) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         for (j in 1:ncol(props_NS)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -955,17 +950,15 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
-  indices_age = which(demo_raw$age_group != "00to02" & demo_raw$age_group != "03to05" & demo_raw$age_group != "06to11" & demo_raw$age_group != "12to17")
+  indices_age = (demo_raw[which(demo_raw$age_group != "00to02" & demo_raw$age_group != "03to05" & demo_raw$age_group != "06to11" & demo_raw$age_group != "12to17"),])$patient_num
   
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         
         for (j in 1:ncol(props_S)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -979,10 +972,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   }
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         for (j in 1:ncol(props_NS)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -1037,17 +1030,15 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   props_S = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
   props_NS = patient_obs_wide[FALSE,] %>% dplyr::select(-c(patient_num,days_since_admission,severity))
-  indices_S = which(demo_raw$severe==1)
-  indices_NS = which(demo_raw$severe==0)
-  indices_age = which(demo_raw$age_group == "00to02" | demo_raw$age_group == "03to05" | demo_raw$age_group == "06to11" | demo_raw$age_group == "12to17")
+  indices_age = (demo_raw[which(demo_raw$age_group == "00to02" | demo_raw$age_group == "03to05" | demo_raw$age_group == "06to11" | demo_raw$age_group == "12to17"),])$patient_num
   
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_S){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_S){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         
         for (j in 1:ncol(props_S)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_S[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -1061,10 +1052,10 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   }
   ct = 1
   for (i in 1:30) {
-    if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_NS){
-      if (as.integer(unique(patient_obs_wide$patient_num))[i] %in% indices_age) {
+    if (unique(patient_obs_wide$patient_num)[i] %in% indices_NS){
+      if (unique(patient_obs_wide$patient_num)[i] %in% indices_age) {
         for (j in 1:ncol(props_NS)) {
-          dat <- filter(patient_obs_wide,patient_num==as.integer(demo_raw$patient_num[i]))
+          dat <- filter(patient_obs_wide,patient_num==demo_raw$patient_num[i])
           if (nrow(dat) != 0){
             num_miss = sum(is.na(dat[j+2]))
             props_NS[ct,j] = num_miss/(nrow(dat[j+2]))
@@ -1126,7 +1117,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
     as.Date(as.character(demo_raw$admission_date), format="%Y-%m-%d")
   dates_diff = c()
   for (i in 1:nrow(demo_raw)){
-    dates_diff = c(dates_diff,rep(demo_raw$date_diff[i],sum(patient_obs_wide$patient_num==as.integer(demo_raw$patient_num[i]))))
+    dates_diff = c(dates_diff,rep(demo_raw$date_diff[i],sum(patient_obs_wide$patient_num==demo_raw$patient_num[i])))
   }
   patient_obs_wide = patient_obs_wide[patient_obs_wide$days_since_admission <= dates_diff,]
   dat = patient_obs_wide
