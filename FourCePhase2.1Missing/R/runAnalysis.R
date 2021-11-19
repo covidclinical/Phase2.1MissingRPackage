@@ -89,11 +89,11 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
  
   lab_mapping <-
     readr::read_csv(
-      file.path(data_dir, "lab_mapping.csv"))
+      file.path(data_dir, "lab_mapping.csv")
     )
   lab_bounds <-
     readr::read_csv(
-      file.path(data_dir, "lab_bounds.csv"))
+      file.path(data_dir, "lab_bounds.csv")
     )
 
   lab_names <- lab_bounds$short_name
