@@ -86,11 +86,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
       file.path(data_dir, "LocalPatientClinicalCourse.csv"),
       col_types = list(patient_num = readr::col_character())
     )
- 
-  lab_mapping <-
-    readr::read_csv(
-      file.path(data_dir, "lab_mapping.csv")
-    )
+
   lab_bounds <-
     readr::read_csv(
       file.path(data_dir, "lab_bounds.csv")
