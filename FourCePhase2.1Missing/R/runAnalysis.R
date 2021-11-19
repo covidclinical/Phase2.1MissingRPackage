@@ -13,6 +13,7 @@
 #' @import(dplyr)
 #' @import(tidyr)
 #' @import(tidyverse)
+#' @import(tibble)
 #' @import(ggplot2)
 #' @import(forcats)
 #' @import(tidytext)
