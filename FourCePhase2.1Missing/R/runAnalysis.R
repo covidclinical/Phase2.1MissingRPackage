@@ -38,13 +38,14 @@
 
 
  
-runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
+runAnalysis <- function(dateFormat="%d-%b-%y",time="all") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
   install.packages("stm")
   library(stm)
  
   devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
   data_dir <- FourCePhase2.1Data::getInputDataDirectoryName()
+  siteid <- FourCePhase2.1Data::getSiteId()
  
   my_dir = data_dir
   
