@@ -24,6 +24,7 @@ Imports:
   logisticPCA (>= 0.2.0),
   Rcpp (>= 1.0.6),
   tidyverse,
+  tidytext,
   ggplot2,
   DT,
   naniar,
