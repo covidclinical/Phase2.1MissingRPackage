@@ -15,6 +15,7 @@
 #' @import(tidyverse)
 #' @import(ggplot2)
 #' @import(forcats)
+#' @import(tidytext)
 #' @import(readr)
 #' @import(Rcpp)
 #' @import(DT)
