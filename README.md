@@ -8,6 +8,8 @@ R code to run, validate, and submit the analysis for the Missing project.
 
 Please run three times with each time period specified in either the runAnalysis function (for docker users) or the runAnalysis_nodocker (for non-docker users). 
 
+*** if necessary, there is an option to change the date format in each runAnalysis() function
+
 To run the package:
 
 For docker users:
@@ -28,9 +30,13 @@ While in R:
 devtools::install_github("https://github.com/covidclinical/Phase2.1MissingRPackage", subdir="FourCePhase2.1Missing", upgrade=FALSE)
 library(FourCePhase2.1Missing)
 
-runAnalysis(time = "phase_1",siteid = "penn")
-runAnalysis(time = "phase_2",siteid = "penn")
-runAnalysis(time = "all",siteid = "penn")
+runAnalysis(dateFormat="%d-%b-%y",time = "phase_1",siteid = "penn")
+submitAnalysis()
+runAnalysis(dateFormat="%d-%b-%y",time = "phase_2",siteid = "penn")
+submitAnalysis()
+runAnalysis(dateFormat="%d-%b-%y",time = "all",siteid = "penn")
+submitAnalysis()
+
 ```
 
 For non-docker users:
@@ -40,11 +46,14 @@ devtools::install_github("https://github.com/covidclinical/Phase2.1MissingRPacka
 library(FourCePhase2.1Missing)
 
 data_dir = '/Your directory here /'
+siteid = 'your site id'
 
-runAnalysis_nodocker(time = "phase_1",siteid = "penn")
-runAnalysis(time = "phase_2",siteid = "penn")
-runAnalysis(time = "all",siteid = "penn")
+runAnalysis_nodocker(dateFormat="%d-%b-%y",time = "phase_1")
+runAnalysis(dateFormat="%d-%b-%y",time = "phase_2")
+runAnalysis(dateFormat="%d-%b-%y",time = "all")
 ```
+
+Please send your results files to us via slack if not using the docker image!
 
 
 
