@@ -20,7 +20,7 @@ docker run \
   dbmi/4ce-analysis:version-2.4.0 R
 ```
 
-While in R: 
+While in R terminal: 
 
 (Change siteid to reflect your site name)
 
