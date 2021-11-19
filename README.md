@@ -4,7 +4,7 @@ R code to run, validate, and submit the analysis for the Missing project.
 *** We are stratifying analyses by three time periods: 
 1) 1/01/2020 to 07/30/2020 ("phase_1")
 2) 08/01/2020 to 09/30/2021 ("phase_2")
-3) 1/01/2020 to 09/30/2021 ("phase_3")
+3) 1/01/2020 to 09/30/2021 ("all")
 
 Please run three times with each time period specified in either the runAnalysis function (for docker users) or the runAnalysis_nodocker (for non-docker users). 
 
