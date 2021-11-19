@@ -13,8 +13,11 @@
 #' @import(dplyr)
 #' @import(tidyr)
 #' @import(tidyverse)
+#' @import(tibble)
 #' @import(ggplot2)
+#' @import(furrr)
 #' @import(forcats)
+#' @import(tidytext)
 #' @import(readr)
 #' @import(Rcpp)
 #' @import(DT)
@@ -24,6 +27,7 @@
 #' @import(RColorBrewer)
 #' @import(mSTEM)
 #' @import(Rcpp)
+#' @import(stringr)
 #' @import(matrixStats)
 #' @import(lubridate)
 #' @import(beepr)
@@ -31,7 +35,6 @@
 #' @import(mSTEM)
 #' @import(MCMCpack)
 #' @import(kableExtra)
-
 
  
 runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time="all",siteid = "upenn") {
@@ -84,8 +87,11 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
       col_types = list(patient_num = readr::col_character())
     )
   
-  lab_mapping <- readr::read_csv("public-data/loinc-map.csv")
-  lab_bounds <- readr::read_csv("public-data/lab_bounds.csv")
+  lab_bounds <-
+    readr::read_csv(
+      file.path(data_dir, "lab_bounds.csv")
+    )
+
   lab_names <- lab_bounds$short_name
   
   if (time == "phase_1") {
@@ -233,11 +239,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
 
   
   
-  
-  
-  lab_mapping <- readr::read_csv("public-data/loinc-map.csv")
-  lab_bounds <- readr::read_csv("public-data/lab_bounds.csv")
-  lab_names <- lab_bounds$short_name
+
   
   
   drops = c("FEU","DDU")
