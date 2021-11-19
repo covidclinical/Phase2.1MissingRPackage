@@ -41,7 +41,10 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
   install.packages("stm")
   library(stm)
-  
+ 
+
+
+ 
   my_dir = data_dir
   
   demo_raw <-
@@ -86,7 +89,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
       file.path(data_dir, "LocalPatientClinicalCourse.csv"),
       col_types = list(patient_num = readr::col_character())
     )
-  
+
   lab_bounds <-
     readr::read_csv(
       file.path(data_dir, "lab_bounds.csv")
@@ -237,6 +240,8 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   obs_raw = test_obs_raw
   
 
+  
+  
   
   
 
@@ -3278,6 +3283,8 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
     {.}
   
   
+  
+  
   if (time == "phase_1") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
          topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
@@ -3298,7 +3305,5 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   
 }
      
-    
-    
-    
+
 
