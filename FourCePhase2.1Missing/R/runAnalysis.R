@@ -3287,19 +3287,22 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   if (time == "phase_1") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
          topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
-         file = paste("results/",paste(siteid,"results_phase1.Rdata",sep="_"),sep=""))
+         file = getProjectOutputDirectory(),
+      paste0(siteid, "_results_phase1.rda"))
   }
   
   if (time == "phase_2") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
          topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
-         file = paste("results/",paste(siteid,"results_phase2.Rdata",sep="_"),sep=""))
+         file = getProjectOutputDirectory(),
+      paste0(siteid, "_results_phase2.rda"))
   }
   
   if (time == "all") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
          topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
-         file = paste("results/",paste(siteid,"results_all.Rdata",sep="_"),sep=""))
+         file = getProjectOutputDirectory(),
+      paste0(siteid, "_results_all.rda"))
   }
   
 }
