@@ -36,6 +36,7 @@
  
 runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
+  for (r_file2 in list.files('R/public-data', full.names = TRUE, pattern = '.R$')) source(r_file2)
   install.packages("stm")
   library(stm)
  
