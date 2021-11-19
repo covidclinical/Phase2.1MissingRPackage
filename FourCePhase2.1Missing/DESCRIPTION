@@ -14,7 +14,7 @@ Imports:
   tidyr (>= 1.1.2),
   readr (>= 1.4.0),
   forcats (>= 0.5.1),
-  tibble (>= 3.0.4),
+  tibble,
   dplyr (>= 1.0.0),
   purrr (>= 0.3.4),
   remotes (>= 2.2.0),
