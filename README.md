@@ -51,7 +51,9 @@ runAnalysis(dateFormat="%d-%b-%y",time = "phase_2")
 runAnalysis(dateFormat="%d-%b-%y",time = "all")
 ```
 
-Please send your results files to us via slack if not using the docker image!
+Please send your results files to us via slack if not using the docker image! They will pop up in your working directory.
+
+Please note that each run will take some time! This is normal. 
 
 
 
