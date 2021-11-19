@@ -1177,12 +1177,12 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
           }
         }
         
-        if (mean(abs(test_vec) > min_corr) > prop_greater) {
-          count = count+1
-          final_names[count] = name1
-          df[,count] = test_vec
-          df_ind[,count] = indices
-        }
+
+         count = count+1
+         final_names[count] = name1
+         df[,count] = test_vec
+         df_ind[,count] = indices
+
       }
     }
   }
@@ -1253,12 +1253,11 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
           }
         }
         
-        if (mean(abs(test_vec) > min_corr) > prop_greater) {
-          count = count+1
-          final_names[count] = name1
-          df[,count] = test_vec
-          df_ind[,count] = indices
-        }
+
+         count = count+1
+         final_names[count] = name1
+         df[,count] = test_vec
+         df_ind[,count] = indices
       }
     }
   }
@@ -1329,12 +1328,11 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
           }
         }
         
-        if (mean(abs(test_vec) > min_corr) > prop_greater) {
-          count = count+1
-          final_names[count] = name1
-          df[,count] = test_vec
-          df_ind[,count] = indices
-        }
+       
+         count = count+1
+         final_names[count] = name1
+         df[,count] = test_vec
+         df_ind[,count] = indices
       }
     }
   }
