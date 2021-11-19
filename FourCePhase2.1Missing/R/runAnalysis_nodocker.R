@@ -1720,6 +1720,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
    days = seq(1,total_days,1)
   }else{
    days = seq(1,30,1)
+  }
   df2[,2] = rep(c(days,days,days),ncol(df))
   c1 = rep("All patients", nrow(df))
   c2 = rep("Severe patients",nrow(df))
@@ -1742,6 +1743,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
    days = seq(1,total_days,1)
   }else{
    days = seq(1,30,1)
+  }
   df2[,2] = rep(c(days,days,days),ncol(df))
   shorthaul_comb= df2
   shorthaul_comb_plot = df2 %>%
@@ -1840,6 +1842,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
    days = seq(1,total_days,1)
   }else{
    days = seq(1,7,1)
+  }
   df2[,2] = rep(c(days,days,days),ncol(df))
   c1 = rep("All patients", nrow(df))
   c2 = rep("Severe patients",nrow(df))
@@ -1862,6 +1865,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
    days = seq(1,total_days,1)
   }else{
    days = seq(1,7,1)
+  }
   df2[,2] = rep(c(days,days,days),ncol(df))
   shorthaul_comb2= df2
   shorthaul_comb_plot = df2 %>%
