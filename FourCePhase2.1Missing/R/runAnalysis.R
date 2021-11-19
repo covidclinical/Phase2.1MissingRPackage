@@ -3274,17 +3274,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   
   tableOne_compiled_all= tableOne_compiled_all[1:(nrow(tableOne_compiled_all)-2),]
   
-  
-  kbl(tableOne_compiled_all) %>%
-    kable_paper("striped", full_width = F) %>%
-    pack_rows("Gender", 2, 3) %>%
-    pack_rows("Age", 4, 10) %>%
-    pack_rows("Race & Ethnicity", 11, 17) %>%
-    # pack_rows("Comorbidites", 20, 20) %>%
-    # pack_rows("Hospital Course", 21, 21) %>%
-    pack_rows("Survival", 18, 19) %>%
-    {.}
-  
+
   
   
   
