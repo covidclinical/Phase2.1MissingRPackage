@@ -60,7 +60,7 @@ demo_stats <- function(var, df, group_var, ...){
   svar <- sym(var)
   df %>%
     group_by(!!svar) %>%
-    count(!!group_var, name = 'n_var') %>%
+    dplyr::count(!!group_var, name = 'n_var') %>%
     as.data.frame() %>%
     blur_it('n_var', ...) %>%
     group_by(!!group_var) %>%
