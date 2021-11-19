@@ -8,6 +8,8 @@ R code to run, validate, and submit the analysis for the Missing project.
 
 Please run three times with each time period specified in either the runAnalysis function (for docker users) or the runAnalysis_nodocker (for non-docker users). 
 
+*** You might want to restart R before running each time point
+
 To run the package:
 
 For docker users:
