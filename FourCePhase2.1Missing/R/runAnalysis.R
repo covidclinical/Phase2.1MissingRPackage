@@ -27,6 +27,7 @@
 #' @import(RColorBrewer)
 #' @import(mSTEM)
 #' @import(Rcpp)
+#' @import(stringr)
 #' @import(matrixStats)
 #' @import(lubridate)
 #' @import(beepr)
