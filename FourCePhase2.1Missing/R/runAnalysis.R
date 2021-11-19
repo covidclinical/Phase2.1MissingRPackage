@@ -40,7 +40,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all") {
   library(stm)
  
   devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
-  siteid = getSiteId() 
+  siteid = FourCePhase2.1Data::getSiteId() 
   data_dir <- FourCePhase2.1Data::getInputDataDirectoryName()
  
   my_dir = data_dir
