@@ -40,6 +40,7 @@
  
 runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
+  for (r_file in list.files('public-data', full.names = TRUE, pattern = '.csv$')) readr::read_csv(r_file)
   library(stm)
  
   devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
@@ -91,8 +92,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
       col_types = list(patient_num = readr::col_character())
     )
 
-  lab_bounds <-
-    readr::read_csv("public-data/lab_bounds.csv")
+  lab_bounds <-readr::read_csv("https://github.com/covidclinical/Phase2.1MissingRPackage/FourCePhase2.1Missing/public-data/lab_bounds.csv")
 
   lab_names <- lab_bounds$short_name
   
