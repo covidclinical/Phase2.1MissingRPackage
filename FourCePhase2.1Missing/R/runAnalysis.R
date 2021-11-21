@@ -94,6 +94,11 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
 
   lab_names <- c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","Ferritin","LDH","Fibrinogen","Procalcitonin","FEU","Troponin_normal","Leukocytes","Lymphocyte","Neutrophil","DDU","PT","Troponin_high")
   
+  lab_bounds <- clin_raw[FALSE,][1]
+  lab_bounds <- c("1742-6","1751-7","1920-8","1975-2","1988-5","2160-0","2276-4","2532-0","3255-7","33959-8","48065-7","49563-0","6690-2","731-0","751-8","48066-5","5902-2","6598-7")
+  colnames(lab_bounds) <- "LOINC"
+ 
+ 
   if (time == "phase_1") {
     demo_raw = demo_raw[demo_raw$admission_date <= "2020-07-30",]
     demo_raw = demo_raw[demo_raw$admission_date >= "2020-01-01",]
