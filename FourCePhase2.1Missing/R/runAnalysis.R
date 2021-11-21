@@ -92,9 +92,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
       col_types = list(patient_num = readr::col_character())
     )
 
-  lab_bounds <-readr::read_csv("https://github.com/covidclinical/Phase2.1MissingRPackage/FourCePhase2.1Missing/public-data/lab_bounds.csv")
-
-  lab_names <- lab_bounds$short_name
+  lab_names <- c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","Ferritin","LDH","Fibrinogen","Procalcitonin","FEU","Troponin_normal","Leukocytes","Lymphocyte","Neutrophil","DDU","PT","Troponin_high")
   
   if (time == "phase_1") {
     demo_raw = demo_raw[demo_raw$admission_date <= "2020-07-30",]
