@@ -30,11 +30,13 @@ While in R terminal:
 devtools::install_github("https://github.com/covidclinical/Phase2.1MissingRPackage", subdir="FourCePhase2.1Missing", upgrade=FALSE)
 library(FourCePhase2.1Missing)
 
-runAnalysis(dateFormat="%d-%b-%y",time = "phase_1",siteid = "penn")
+siteid = 'your site id'
+
+runAnalysis(dateFormat="%d-%b-%y",time = "phase_1",siteid)
 submitAnalysis()
-runAnalysis(dateFormat="%d-%b-%y",time = "phase_2",siteid = "penn")
+runAnalysis(dateFormat="%d-%b-%y",time = "phase_2",siteid)
 submitAnalysis()
-runAnalysis(dateFormat="%d-%b-%y",time = "all",siteid = "penn")
+runAnalysis(dateFormat="%d-%b-%y",time = "all",siteid)
 submitAnalysis()
 
 ```
