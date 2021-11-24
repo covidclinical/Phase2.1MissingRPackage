@@ -59,6 +59,6 @@ Please send your results files to us via slack if not using the docker image! Th
 
 Please note that each run will take some time! This is normal. 
 
-
+Dependency: stm package
 
 
