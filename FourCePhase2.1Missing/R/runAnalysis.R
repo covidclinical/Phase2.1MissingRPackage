@@ -2164,8 +2164,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   colnames(beta_mat) <- try(stmfit$vocab)
   rownames(beta_mat) <- try(paste("Topic", 1:K))
   try(heatmap((beta_mat), main = "Ordered",
-          col= colorRampPalette(brewer.pal(8, "Blues"))(25))
-  legend(x="topleft", legend=c("min", "ave", "max"), 
+          col= colorRampPalette(brewer.pal(8, "Blues"))(25)))
+  try(legend(x="topleft", legend=c("min", "ave", "max"), 
          fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
   labs = try(stmfit$vocab)
   
@@ -2173,8 +2173,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   colnames(beta_mat2) <- try(stmfit2$vocab)
   rownames(beta_mat2) <- try(paste("Topic", 1:K2))
   try(heatmap((beta_mat2), main = "Ordered",
-          col= colorRampPalette(brewer.pal(8, "Blues"))(25))
-  legend(x="topleft", legend=c("min", "ave", "max"), 
+          col= colorRampPalette(brewer.pal(8, "Blues"))(25)))
+  try(legend(x="topleft", legend=c("min", "ave", "max"), 
          fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
   labs = try(stmfit2$vocab)
   
@@ -2521,8 +2521,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   colnames(beta_mat3) <- try(stmfit$vocab)
   rownames(beta_mat3) <- try(paste("Topic", 1:K))
   try(heatmap((beta_mat3), main = "Ordered",
-          col= colorRampPalette(brewer.pal(8, "Blues"))(25))
-  legend(x="topleft", legend=c("min", "ave", "max"), 
+          col= colorRampPalette(brewer.pal(8, "Blues"))(25)))
+  try(legend(x="topleft", legend=c("min", "ave", "max"), 
          fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
   labs = try(stmfit$vocab)
   
@@ -2530,8 +2530,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   colnames(beta_mat4) <- try(stmfit2$vocab)
   rownames(beta_mat4) <- try(paste("Topic", 1:K2))
   try(heatmap((beta_mat4), main = "Ordered",
-          col= colorRampPalette(brewer.pal(8, "Blues"))(25))
-  legend(x="topleft", legend=c("min", "ave", "max"), 
+          col= colorRampPalette(brewer.pal(8, "Blues"))(25)))
+  try(legend(x="topleft", legend=c("min", "ave", "max"), 
          fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
   labs = try(stmfit2$vocab)
   
