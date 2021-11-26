@@ -39,6 +39,8 @@
  
 runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time="all",siteid = "upenn") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
+  install.packages('stm')
+  library(stm)
  
 
 
