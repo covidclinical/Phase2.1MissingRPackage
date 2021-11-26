@@ -2070,16 +2070,31 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     pivot_longer(-id, names_to = "lab", values_to = "n") %>%
     tidytext::cast_dfm(id, lab, n)
   
+  topic_diagnostics = c()
+  beta_mat = c()
+  beta_mat2 = c()
+  TE_results <- c()
+  Severity_results <- c()
+  Neuro_results <- c()
+  ARDs_results <- c()
   
-  system.time(many_models <- data.frame(K = seq(2, 8, 1)) %>%
+  TE_results2 <- c()
+  Severity_results2 <- c()
+  Neuro_results2 <- c()
+  ARDs_results2 <- c()
+  
+                        
+                        
+  
+  try(system.time(many_models <- data.frame(K = seq(2, 8, 1)) %>%
                 mutate(topic_model = furrr::future_map(K, ~ stm(
                   x_dfm,
                   K = .,
                   seed = TRUE,
                   verbose = FALSE
-                ))))
-  heldout <- make.heldout(x_dfm)
-  k_result <- many_models %>%
+                )))))
+  heldout <- try(make.heldout(x_dfm))
+  k_result <- try(many_models %>%
     mutate(
       exclusivity = map(topic_model, exclusivity),
       semantic_coherence = map(topic_model, semanticCoherence, x_dfm),
@@ -2089,30 +2104,30 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
       lfact = map_dbl(topic_model, function(x) lfactorial(x$settings$dim$K)),
       lbound = bound + lfact,
       iterations = map_dbl(topic_model, function(x) length(x$convergence$bound))
-    )
-  topic_diagnostics = k_result %>%
+    ))
+  topic_diagnostics = try(k_result %>%
     transmute(K,
               `Lower bound` = lbound,
               Residuals = map_dbl(residual, "dispersion"),
               `Semantic coherence` = map_dbl(semantic_coherence, mean),
               `Held-out likelihood` = map_dbl(eval_heldout, "expected.heldout")
     ) %>%
-    gather(Metric, Value, -K) 
-  topic_diagnostics_wide = data.frame(matrix(ncol=0,nrow=7))
-  topic_diagnostics_wide$K= topic_diagnostics$K[1:7]
-  topic_diagnostics_wide$LB= topic_diagnostics$Value[1:7]
-  topic_diagnostics_wide$Res = topic_diagnostics$Value[8:14]
-  topic_diagnostics_wide$SC = topic_diagnostics$Value[15:21]
-  topic_diagnostics_wide$HL = topic_diagnostics$Value[22:28]
-  ind = c(which.max(topic_diagnostics_wide$LB)+1,which.max(topic_diagnostics_wide$SC)+1,which.max(topic_diagnostics_wide$HL)+1,which.min(topic_diagnostics_wide$Res)+1)
+    gather(Metric, Value, -K)) 
+  topic_diagnostics_wide = try(data.frame(matrix(ncol=0,nrow=7)))
+  topic_diagnostics_wide$K= try(topic_diagnostics$K[1:7])
+  topic_diagnostics_wide$LB= try(topic_diagnostics$Value[1:7])
+  topic_diagnostics_wide$Res = try(topic_diagnostics$Value[8:14])
+  topic_diagnostics_wide$SC = try(topic_diagnostics$Value[15:21])
+  topic_diagnostics_wide$HL = try(topic_diagnostics$Value[22:28])
+  ind = try(c(which.max(topic_diagnostics_wide$LB)+1,which.max(topic_diagnostics_wide$SC)+1,which.max(topic_diagnostics_wide$HL)+1,which.min(topic_diagnostics_wide$Res)+1))
   Modes <- function(x) {
     ux <- unique(x)
     tab <- tabulate(match(x, ux))
     ux[tab == max(tab)]
   }
-  Modes(ind)
+  try(Modes(ind))
   
-  topic_diagnostics_plot = k_result %>%
+  topic_diagnostics_plot = try(k_result %>%
     transmute(K,
               `Lower bound` = lbound,
               Residuals = map_dbl(residual, "dispersion"),
@@ -2130,70 +2145,70 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
       x = "K (number of topics)",
       y = NULL,
       title = "Model diagnostics by number of topics"
-    )
+    ))
   topic_diagnostics_plot
   
   
   
   #Beta matrix contains log probabilities of labs in topics. Generate heat map of beta values for each lab.
   
-  K <- Modes(ind)[1]
+  K <- try(Modes(ind)[1])
   K2  = 5
-  stmfit <- stm(x_dfm, K = K, verbose = FALSE, init.type = "Spectral", seed = TRUE)
-  stmfit2 <- stm(x_dfm, K = K2, verbose = FALSE, init.type = "Spectral", seed = TRUE)
-  stmfit_beta <- stmfit$beta
-  stmfit_beta2 <- stmfit2$beta
+  stmfit <- try(stm(x_dfm, K = K, verbose = FALSE, init.type = "Spectral", seed = TRUE))
+  stmfit2 <- try(stm(x_dfm, K = K2, verbose = FALSE, init.type = "Spectral", seed = TRUE))
+  stmfit_beta <- try(stmfit$beta)
+  stmfit_beta2 <- try(stmfit2$beta)
   
-  K=Modes(ind)[1]
-  beta_mat <- exp(stmfit$beta$logbeta[[1]])
-  colnames(beta_mat) <- stmfit$vocab
-  rownames(beta_mat) <- paste("Topic", 1:K)
-  heatmap((beta_mat), main = "Ordered",
+  K=try(Modes(ind)[1])
+  beta_mat <- try(exp(stmfit$beta$logbeta[[1]]))
+  colnames(beta_mat) <- try(stmfit$vocab)
+  rownames(beta_mat) <- try(paste("Topic", 1:K))
+  try(heatmap((beta_mat), main = "Ordered",
           col= colorRampPalette(brewer.pal(8, "Blues"))(25))
   legend(x="topleft", legend=c("min", "ave", "max"), 
-         fill=colorRampPalette(brewer.pal(8, "Blues"))(3))
-  labs = stmfit$vocab
+         fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
+  labs = try(stmfit$vocab)
   
-  beta_mat2 <- exp(stmfit2$beta$logbeta[[1]])
-  colnames(beta_mat2) <- stmfit2$vocab
-  rownames(beta_mat2) <- paste("Topic", 1:K2)
-  heatmap((beta_mat2), main = "Ordered",
+  beta_mat2 <- try(exp(stmfit2$beta$logbeta[[1]]))
+  colnames(beta_mat2) <- try(stmfit2$vocab)
+  rownames(beta_mat2) <- try(paste("Topic", 1:K2))
+  try(heatmap((beta_mat2), main = "Ordered",
           col= colorRampPalette(brewer.pal(8, "Blues"))(25))
   legend(x="topleft", legend=c("min", "ave", "max"), 
-         fill=colorRampPalette(brewer.pal(8, "Blues"))(3))
-  labs = stmfit2$vocab
+         fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
+  labs = try(stmfit2$vocab)
   
   
-  theta <- stmfit$theta
-  theta2 <- stmfit2$theta
+  theta <- try(stmfit$theta)
+  theta2 <- try(stmfit2$theta)
   corrFunc <- function(var1, var2) {
     result = cor.test(var1,var2)
     data.frame(var1, var2, result[c("estimate","p.value","statistic","method")], 
                stringsAsFactors=FALSE)
   }
   ## Pairs of variables for which we want correlations
-  theta <- stmfit$theta
-  K = Modes(ind)[1]
-  TE_results <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")])
-  Severity_results <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")])
-  Neuro_results <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")])
-  ARDs_results <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")])
+  theta <- try(stmfit$theta)
+  K = try(Modes(ind)[1])
+  TE_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
+  Severity_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")]))
+  Neuro_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
+  ARDs_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
   
-  TE_results2 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")])
-  Severity_results2 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")])
-  Neuro_results2 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")])
-  ARDs_results2 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")])
+  TE_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
+  Severity_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")]))
+  Neuro_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
+  ARDs_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
   
-  theta <- stmfit$theta
-  K = Modes(ind)
+  theta <- try(stmfit$theta)
+  K = try(Modes(ind))
   #TE 
-  topic_df <- data.frame(theta, te = missing_by_patient$TE) %>% 
+  topic_df <- try(data.frame(theta, te = missing_by_patient$TE) %>% 
     pivot_longer(- te, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
+    mutate(topic = gsub('X', 'Topic ', topic)))
   
-  TE_boxplot <- topic_df %>% 
+  TE_boxplot <- try(topic_df %>% 
     ggplot(aes(x = te, y = value)) +
     labs(
       x = "Thrombotic Event",
@@ -2201,13 +2216,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   TE_boxplot
   #Severity
-  topic_df <- data.frame(theta, Severity = missing_by_patient$severe) %>% 
+  topic_df <- try(data.frame(theta, Severity = missing_by_patient$severe) %>% 
     pivot_longer(- Severity, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Severity_boxplot <- topic_df %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Severity_boxplot <- try(topic_df %>% 
     ggplot(aes(x = Severity, y = value)) +
     labs(
       x = "Severity",
@@ -2215,13 +2230,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   Severity_boxplot
   #Neuro
-  topic_df <- data.frame(theta, Neuro = missing_by_patient$Neuro) %>% 
+  topic_df <- try(data.frame(theta, Neuro = missing_by_patient$Neuro) %>% 
     pivot_longer(- Neuro, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Neuro_boxplot <- topic_df %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Neuro_boxplot <- try(topic_df %>% 
     ggplot(aes(x = Neuro, y = value)) +
     labs(
       x = "Neurological Event",
@@ -2229,13 +2244,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   Neuro_boxplot
   #ARDs
-  topic_df <- data.frame(theta, ARDs = missing_by_patient$ARDs) %>% 
+  topic_df <- try(data.frame(theta, ARDs = missing_by_patient$ARDs) %>% 
     pivot_longer(- ARDs, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  ARDs_boxplot <- topic_df %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  ARDs_boxplot <- try(topic_df %>% 
     ggplot(aes(x = ARDs, y = value)) +
     labs(
       x = "Acute Respiratory Distress",
@@ -2243,7 +2258,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   ARDs_boxplot
   
   
@@ -2255,11 +2270,11 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   
   
   
-  topic_df2 <- data.frame(theta2, te = missing_by_patient$TE) %>% 
+  topic_df2 <- try(data.frame(theta2, te = missing_by_patient$TE) %>% 
     pivot_longer(- te, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
+    mutate(topic = gsub('X', 'Topic ', topic)))
   
-  TE_boxplot2 <- topic_df2 %>% 
+  TE_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = te, y = value)) +
     labs(
       x = "Thrombotic Event",
@@ -2267,13 +2282,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   TE_boxplot2
   #Severity
-  topic_df2 <- data.frame(theta2, Severity = missing_by_patient$severe) %>% 
+  topic_df2 <- try(data.frame(theta2, Severity = missing_by_patient$severe) %>% 
     pivot_longer(- Severity, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Severity_boxplot2 <- topic_df2 %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Severity_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = Severity, y = value)) +
     labs(
       x = "Severity",
@@ -2281,13 +2296,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   Severity_boxplot2
   #Neuro
-  topic_df2 <- data.frame(theta2, Neuro = missing_by_patient$Neuro) %>% 
+  topic_df2 <- try(data.frame(theta2, Neuro = missing_by_patient$Neuro) %>% 
     pivot_longer(- Neuro, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Neuro_boxplot2 <- topic_df2 %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Neuro_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = Neuro, y = value)) +
     labs(
       x = "Neurological Event",
@@ -2295,13 +2310,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   Neuro_boxplot2
   #ARDs
-  topic_df2 <- data.frame(theta2, ARDs = missing_by_patient$ARDs) %>% 
+  topic_df2 <- try(data.frame(theta2, ARDs = missing_by_patient$ARDs) %>% 
     pivot_longer(- ARDs, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  ARDs_boxplot2 <- topic_df2 %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  ARDs_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = ARDs, y = value)) +
     labs(
       x = "Acute Respiratory Distress",
@@ -2309,7 +2324,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
+    NULL)
   ARDs_boxplot2
   
   
@@ -2412,16 +2427,31 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     pivot_longer(-id, names_to = "lab", values_to = "n") %>%
     tidytext::cast_dfm(id, lab, n)
   
+  topic_diagnostics2 = c()
+  beta_mat3 = c()
+  beta_mat4 = c()
+  TE_results3 <- c()
+  Severity_results3 <- c()
+  Neuro_results3 <- c()
+  ARDs_results3 <- c()
   
-  system.time(many_models <- data.frame(K = seq(2, 8, 1)) %>%
+  TE_results4 <- c()
+  Severity_results4 <- c()
+  Neuro_results4 <- c()
+  ARDs_results4 <- c()
+  
+                        
+                        
+  
+  try(system.time(many_models <- data.frame(K = seq(2, 8, 1)) %>%
                 mutate(topic_model = furrr::future_map(K, ~ stm(
                   x_dfm,
                   K = .,
                   seed = TRUE,
                   verbose = FALSE
-                ))))
-  heldout <- make.heldout(x_dfm)
-  k_result <- many_models %>%
+                )))))
+  heldout <- try(make.heldout(x_dfm))
+  k_result <- try(many_models %>%
     mutate(
       exclusivity = map(topic_model, exclusivity),
       semantic_coherence = map(topic_model, semanticCoherence, x_dfm),
@@ -2431,30 +2461,30 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
       lfact = map_dbl(topic_model, function(x) lfactorial(x$settings$dim$K)),
       lbound = bound + lfact,
       iterations = map_dbl(topic_model, function(x) length(x$convergence$bound))
-    )
-  topic_diagnostics = k_result %>%
+    ))
+  topic_diagnostics = try(k_result %>%
     transmute(K,
               `Lower bound` = lbound,
               Residuals = map_dbl(residual, "dispersion"),
               `Semantic coherence` = map_dbl(semantic_coherence, mean),
               `Held-out likelihood` = map_dbl(eval_heldout, "expected.heldout")
     ) %>%
-    gather(Metric, Value, -K) 
-  topic_diagnostics_wide = data.frame(matrix(ncol=0,nrow=7))
-  topic_diagnostics_wide$K= topic_diagnostics$K[1:7]
-  topic_diagnostics_wide$LB= topic_diagnostics$Value[1:7]
-  topic_diagnostics_wide$Res = topic_diagnostics$Value[8:14]
-  topic_diagnostics_wide$SC = topic_diagnostics$Value[15:21]
-  topic_diagnostics_wide$HL = topic_diagnostics$Value[22:28]
-  ind = c(which.max(topic_diagnostics_wide$LB)+1,which.max(topic_diagnostics_wide$SC)+1,which.max(topic_diagnostics_wide$HL)+1,which.min(topic_diagnostics_wide$Res)+1)
+    gather(Metric, Value, -K)) 
+  topic_diagnostics_wide = try(data.frame(matrix(ncol=0,nrow=7)))
+  topic_diagnostics_wide$K= try(topic_diagnostics$K[1:7])
+  topic_diagnostics_wide$LB= try(topic_diagnostics$Value[1:7])
+  topic_diagnostics_wide$Res = try(topic_diagnostics$Value[8:14])
+  topic_diagnostics_wide$SC = try(topic_diagnostics$Value[15:21])
+  topic_diagnostics_wide$HL = try(topic_diagnostics$Value[22:28])
+  ind = try(c(which.max(topic_diagnostics_wide$LB)+1,which.max(topic_diagnostics_wide$SC)+1,which.max(topic_diagnostics_wide$HL)+1,which.min(topic_diagnostics_wide$Res)+1))
   Modes <- function(x) {
     ux <- unique(x)
     tab <- tabulate(match(x, ux))
     ux[tab == max(tab)]
   }
-  Modes(ind)
+  try(Modes(ind))
   
-  topic_diagnostics_plot2 = k_result %>%
+  topic_diagnostics_plot = try(k_result %>%
     transmute(K,
               `Lower bound` = lbound,
               Residuals = map_dbl(residual, "dispersion"),
@@ -2472,70 +2502,70 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
       x = "K (number of topics)",
       y = NULL,
       title = "Model diagnostics by number of topics"
-    )
-  topic_diagnostics_plot2
+    ))
+  topic_diagnostics_plot
   
   
   
   #Beta matrix contains log probabilities of labs in topics. Generate heat map of beta values for each lab.
   
-  K <- Modes(ind)[1]
+  K <- try(Modes(ind)[1])
   K2  = 5
-  stmfit <- stm(x_dfm, K = K, verbose = FALSE, init.type = "Spectral", seed = TRUE)
-  stmfit2 <- stm(x_dfm, K = K2, verbose = FALSE, init.type = "Spectral", seed = TRUE)
-  stmfit_beta <- stmfit$beta
-  stmfit_beta2 <- stmfit2$beta
+  stmfit <- try(stm(x_dfm, K = K, verbose = FALSE, init.type = "Spectral", seed = TRUE))
+  stmfit2 <- try(stm(x_dfm, K = K2, verbose = FALSE, init.type = "Spectral", seed = TRUE))
+  stmfit_beta <- try(stmfit$beta)
+  stmfit_beta2 <- try(stmfit2$beta)
   
-  K=Modes(ind)[1]
-  beta_mat3 <- exp(stmfit$beta$logbeta[[1]])
-  colnames(beta_mat3) <- stmfit$vocab
-  rownames(beta_mat3) <- paste("Topic", 1:K)
-  heatmap((beta_mat3), main = "Ordered",
+  K=try(Modes(ind)[1])
+  beta_mat3 <- try(exp(stmfit$beta$logbeta[[1]]))
+  colnames(beta_mat3) <- try(stmfit$vocab)
+  rownames(beta_mat3) <- try(paste("Topic", 1:K))
+  try(heatmap((beta_mat3), main = "Ordered",
           col= colorRampPalette(brewer.pal(8, "Blues"))(25))
   legend(x="topleft", legend=c("min", "ave", "max"), 
-         fill=colorRampPalette(brewer.pal(8, "Blues"))(3))
-  labs = stmfit$vocab
+         fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
+  labs = try(stmfit$vocab)
   
-  beta_mat4 <- exp(stmfit2$beta$logbeta[[1]])
-  colnames(beta_mat4) <- stmfit2$vocab
-  rownames(beta_mat4) <- paste("Topic", 1:K2)
-  heatmap((beta_mat4), main = "Ordered",
+  beta_mat4 <- try(exp(stmfit2$beta$logbeta[[1]]))
+  colnames(beta_mat4) <- try(stmfit2$vocab)
+  rownames(beta_mat4) <- try(paste("Topic", 1:K2))
+  try(heatmap((beta_mat4), main = "Ordered",
           col= colorRampPalette(brewer.pal(8, "Blues"))(25))
   legend(x="topleft", legend=c("min", "ave", "max"), 
-         fill=colorRampPalette(brewer.pal(8, "Blues"))(3))
-  labs = stmfit2$vocab
+         fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
+  labs = try(stmfit2$vocab)
   
   
-  theta <- stmfit$theta
-  theta2 <- stmfit2$theta
+  theta <- try(stmfit$theta)
+  theta2 <- try(stmfit2$theta)
   corrFunc <- function(var1, var2) {
     result = cor.test(var1,var2)
     data.frame(var1, var2, result[c("estimate","p.value","statistic","method")], 
                stringsAsFactors=FALSE)
   }
   ## Pairs of variables for which we want correlations
-  theta <- stmfit$theta
-  K = Modes(ind)[1]
-  TE_results3 <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")])
-  Severity_results3 <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")])
-  Neuro_results3 <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")])
-  ARDs_results3 <- lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")])
+  theta <- try(stmfit$theta)
+  K = try(Modes(ind)[1])
+  TE_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
+  Severity_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")]))
+  Neuro_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
+  ARDs_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
   
-  TE_results4 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")])
-  Severity_results4 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")])
-  Neuro_results4 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")])
-  ARDs_results4 <- lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")])
+  TE_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
+  Severity_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")]))
+  Neuro_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
+  ARDs_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
   
-  theta <- stmfit$theta
-  K = Modes(ind)
+  theta <- try(stmfit$theta)
+  K = try(Modes(ind))
   #TE 
-  topic_df <- data.frame(theta, te = missing_by_patient$TE) %>% 
+  topic_df <- try(data.frame(theta, te = missing_by_patient$TE) %>% 
     pivot_longer(- te, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
+    mutate(topic = gsub('X', 'Topic ', topic)))
   
-  TE_boxplot3 <- topic_df %>% 
+  TE_boxplot <- try(topic_df %>% 
     ggplot(aes(x = te, y = value)) +
     labs(
       x = "Thrombotic Event",
@@ -2543,13 +2573,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  TE_boxplot3
+    NULL)
+  TE_boxplot
   #Severity
-  topic_df <- data.frame(theta, Severity = missing_by_patient$severe) %>% 
+  topic_df <- try(data.frame(theta, Severity = missing_by_patient$severe) %>% 
     pivot_longer(- Severity, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Severity_boxplot3 <- topic_df %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Severity_boxplot <- try(topic_df %>% 
     ggplot(aes(x = Severity, y = value)) +
     labs(
       x = "Severity",
@@ -2557,13 +2587,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  Severity_boxplot3
+    NULL)
+  Severity_boxplot
   #Neuro
-  topic_df <- data.frame(theta, Neuro = missing_by_patient$Neuro) %>% 
+  topic_df <- try(data.frame(theta, Neuro = missing_by_patient$Neuro) %>% 
     pivot_longer(- Neuro, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Neuro_boxplot3 <- topic_df %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Neuro_boxplot <- try(topic_df %>% 
     ggplot(aes(x = Neuro, y = value)) +
     labs(
       x = "Neurological Event",
@@ -2571,13 +2601,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  Neuro_boxplot3
+    NULL)
+  Neuro_boxplot
   #ARDs
-  topic_df <- data.frame(theta, ARDs = missing_by_patient$ARDs) %>% 
+  topic_df <- try(data.frame(theta, ARDs = missing_by_patient$ARDs) %>% 
     pivot_longer(- ARDs, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  ARDs_boxplot3 <- topic_df %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  ARDs_boxplot <- try(topic_df %>% 
     ggplot(aes(x = ARDs, y = value)) +
     labs(
       x = "Acute Respiratory Distress",
@@ -2585,8 +2615,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  ARDs_boxplot3
+    NULL)
+  ARDs_boxplot
   
   
   
@@ -2597,11 +2627,11 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   
   
   
-  topic_df2 <- data.frame(theta2, te = missing_by_patient$TE) %>% 
+  topic_df2 <- try(data.frame(theta2, te = missing_by_patient$TE) %>% 
     pivot_longer(- te, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
+    mutate(topic = gsub('X', 'Topic ', topic)))
   
-  TE_boxplot4 <- topic_df2 %>% 
+  TE_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = te, y = value)) +
     labs(
       x = "Thrombotic Event",
@@ -2609,13 +2639,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  TE_boxplot4
+    NULL)
+  TE_boxplot2
   #Severity
-  topic_df2 <- data.frame(theta2, Severity = missing_by_patient$severe) %>% 
+  topic_df2 <- try(data.frame(theta2, Severity = missing_by_patient$severe) %>% 
     pivot_longer(- Severity, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Severity_boxplot4 <- topic_df2 %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Severity_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = Severity, y = value)) +
     labs(
       x = "Severity",
@@ -2623,13 +2653,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  Severity_boxplot4
+    NULL)
+  Severity_boxplot2
   #Neuro
-  topic_df2 <- data.frame(theta2, Neuro = missing_by_patient$Neuro) %>% 
+  topic_df2 <- try(data.frame(theta2, Neuro = missing_by_patient$Neuro) %>% 
     pivot_longer(- Neuro, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  Neuro_boxplot4 <- topic_df2 %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  Neuro_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = Neuro, y = value)) +
     labs(
       x = "Neurological Event",
@@ -2637,13 +2667,13 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  Neuro_boxplot4
+    NULL)
+  Neuro_boxplot2
   #ARDs
-  topic_df2 <- data.frame(theta2, ARDs = missing_by_patient$ARDs) %>% 
+  topic_df2 <- try(data.frame(theta2, ARDs = missing_by_patient$ARDs) %>% 
     pivot_longer(- ARDs, names_to = 'topic') %>% 
-    mutate(topic = gsub('X', 'Topic ', topic))
-  ARDs_boxplot4 <- topic_df2 %>% 
+    mutate(topic = gsub('X', 'Topic ', topic)))
+  ARDs_boxplot2 <- try(topic_df2 %>% 
     ggplot(aes(x = ARDs, y = value)) +
     labs(
       x = "Acute Respiratory Distress",
@@ -2651,8 +2681,10 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) +
     geom_boxplot(alpha = 0.2) +
     facet_wrap(~ topic, scales = 'free') +
-    NULL
-  ARDs_boxplot4
+    NULL)
+  ARDs_boxplot2
+  
+  
   
   
   
@@ -3281,19 +3313,19 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   
   if (time == "phase_1") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
-         topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
+         topic_diagnostics,topic_diagnostics2,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,tableOne_compiled_all,
          file = paste(paste(getProjectOutputDirectory(),"/",sep=""),paste(siteid,"results_phase1.RData",sep="_"),sep=""))
   }
   
   if (time == "phase_2") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
-         topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
+         topic_diagnostics,topic_diagnostics2,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,tableOne_compiled_all,
          file = paste(paste(getProjectOutputDirectory(),"/",sep=""),paste(siteid,"results_phase2.RData",sep="_"),sep=""))
   }
   
   if (time == "all") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
-         topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
+         topic_diagnostics,topic_diagnostics2,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,beta_mat,beta_mat2,beta_mat3,beta_mat4,tableOne_compiled_all,
          file = paste(paste(getProjectOutputDirectory(),"/",sep=""),paste(siteid,"results_all.RData",sep="_"),sep=""))
    }
   
