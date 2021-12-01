@@ -37,7 +37,7 @@ continuous_stats <- function(df, cont_var, name, group_var,...) {
   group_var <- sym(group_var)
   
   df %>%
-    select(group_var, cont_var) %>%
+    dplyr::select(group_var, cont_var) %>%
     group_by(!!group_var) %>%
     summarise(median_var = median(!!cont_var, na.rm = TRUE),
               min_var = min(!!cont_var, na.rm = TRUE),
@@ -72,8 +72,8 @@ demo_stats <- function(var, df, group_var, ...){
                 values_from = c(n_var, prop, pres),
                 values_fill = list(n_var = 0, prop = 0, pres = '0 (0%)')) %>%
     mutate(variable = paste(var, !!svar, sep = '.')) %>%
-    select(- !!svar) %>%
-    select(variable, everything())
+    dplyr::select(- !!svar) %>%
+    dplyr::select(variable, everything())
 }
 
 blur_it <- function(df, vars, blur_abs, mask_thres){
@@ -179,7 +179,7 @@ get_table1 <- function(
   comorbidities_map = comorbidities$Abbreviation
   
   df %>%
-    select(all_of(comorbidities_map)) %>%
+    dplyr::select(all_of(comorbidities_map)) %>%
     colSums() %>%
     data.frame(n_patients = .) %>%
     tibble::rownames_to_column("Abbreviation") %>%
