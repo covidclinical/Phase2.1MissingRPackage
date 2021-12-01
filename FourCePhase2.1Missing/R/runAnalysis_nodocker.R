@@ -48,19 +48,19 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   my_dir = data_dir
   
   demo_raw <-
-    readr::read_csv(
-      file.path(my_dir, "LocalPatientSummary.csv"),
-      col_types = list(patient_num = readr::col_character()),
-      na = "1900-01-01"
-    ) %>%
-    mutate(
-      across(ends_with("_date") & where(is.character), lubridate::mdy),     
-      last_discharge_date = if_else(
-        !is.na(death_date) & death_date < last_discharge_date,
-        death_date,
-        last_discharge_date
-      )
+  readr::read_csv(
+    file.path(my_dir, "LocalPatientSummary.csv"),
+    col_types = list(patient_num = readr::col_character()),
+    na = c("1900-01-01", "1/1/1900")
+  ) %>%
+  mutate(
+    across(ends_with("_date") & where(is.character), lubridate::mdy),     
+    last_discharge_date = if_else(
+      !is.na(death_date) & death_date < last_discharge_date,
+      death_date,
+      last_discharge_date
     )
+  )
   
   obs_raw <-
     readr::read_csv(
