@@ -2563,10 +2563,10 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   Neuro_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
   ARDs_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
-  TE_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$TE == TRUE],(theta[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
-  Severity_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$severe == TRUE],(theta[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
-  Neuro_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$Neuro == TRUE],(theta[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
-  ARDs_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$ARDs == TRUE],(theta[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  TE_results_wilcox3 <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$TE == TRUE],(theta[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Severity_results_wilcox3 <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$severe == TRUE],(theta[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Neuro_results_wilcox3 <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$Neuro == TRUE],(theta[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  ARDs_results_wilcox3 <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$ARDs == TRUE],(theta[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
   
   
   TE_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
