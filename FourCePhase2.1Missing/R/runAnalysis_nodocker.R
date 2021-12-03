@@ -2197,7 +2197,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   ARDs_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
   TE_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$TE == TRUE],(theta[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
-  Severity_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$severe == TRUE],(theta[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")])
+  Severity_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$severe == TRUE],(theta[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
   Neuro_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$Neuro == TRUE],(theta[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
   ARDs_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$ARDs == TRUE],(theta[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
   
