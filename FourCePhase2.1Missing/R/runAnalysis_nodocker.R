@@ -90,13 +90,16 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
       col_types = list(patient_num = readr::col_character())
     )
 
-  lab_bounds1 <- c("1742-6","1751-7","1920-8","1975-2","1988-5","2160-0","2276-4","2532-0","3255-7","33959-8","48065-7","49563-0","6690-2","731-0","751-8","48066-5","5902-2","6598-7")
-  lab_bounds <- clin_raw[1:length(lab_bounds1),][1]
+lab_bounds1 <- c("1742-6","1751-7","1920-8","1975-2","1988-5","2160-0","2276-4","2532-0","3255-7","33959-8","48065-7","49563-0","6690-2","731-0","751-8","48066-5","5902-2","6598-7")
+lab_bounds <- clin_raw[1:length(lab_bounds1),][1]
 
-  lab_bounds$LOINC<- lab_bounds1
-  lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","Ferritin","LDH","Fibrinogen","Procalcitonin","FEU","Troponin_normal","Leukocytes","Lymphocyte","Neutrophil","DDU","PT","Troponin_high")
+lab_bounds$LOINC<- lab_bounds1
+lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","Ferritin","LDH","Fibrinogen","Procalcitonin","FEU","Troponin_normal","Leukocytes","Lymphocyte","Neutrophil","DDU","PT","Troponin_high")
 
-  
+
+
+ 
+ 
   if (time == "phase_1") {
     demo_raw = demo_raw[demo_raw$admission_date <= "2020-07-30",]
     demo_raw = demo_raw[demo_raw$admission_date >= "2020-01-01",]
@@ -1123,7 +1126,8 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   prop_greater = 0
   te_labs2 <- dat %>% 
     filter(days_since_admission < 100,
-           days_since_admission >= 0)
+           days_since_admission >= 0) %>% 
+    mutate(te = patient_num %in% unique(te_patients$patient_num))
   #Calculate correlation matrices between lab missing indicators for each time point
   sim_mat = matrix(rep(0),ncol(te_labs2)-4,ncol(te_labs2)-4)
   mat_list = list()
@@ -1175,13 +1179,11 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
             indices[ct] = h
           }
         }
-        
 
          count = count+1
          final_names[count] = name1
          df[,count] = test_vec
          df_ind[,count] = indices
-
       }
     }
   }
@@ -1198,7 +1200,8 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   prop_greater = 0
   te_labs2 <- dat %>% 
     filter(days_since_admission < 100,
-           days_since_admission >= 0) 
+           days_since_admission >= 0) %>% 
+    mutate(te = patient_num %in% unique(te_patients$patient_num))
   #Calculate correlation matrices between lab missing indicators for each time point
   sim_mat = matrix(rep(0),ncol(te_labs2)-4,ncol(te_labs2)-4)
   mat_list = list()
@@ -1251,7 +1254,6 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
           }
         }
         
-
          count = count+1
          final_names[count] = name1
          df[,count] = test_vec
@@ -1272,7 +1274,8 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   prop_greater = 0
   te_labs2 <- dat %>% 
     filter(days_since_admission < 100,
-           days_since_admission >= 0) 
+           days_since_admission >= 0) %>% 
+    mutate(te = patient_num %in% unique(te_patients$patient_num))
   #Calculate correlation matrices between lab missing indicators for each time point
   sim_mat = matrix(rep(0),ncol(te_labs2)-4,ncol(te_labs2)-4)
   mat_list = list()
@@ -1325,7 +1328,6 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
           }
         }
         
-       
          count = count+1
          final_names[count] = name1
          df[,count] = test_vec
@@ -1922,9 +1924,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   
   
   
-  
-  
- ####### LDA Topic Modeling
+  ####### LDA Topic Modeling
   
   
   #Read in thrombotic icd codes. Add column "truncated code" for first three characters of each code. Extract unique truncated codes.
@@ -2713,11 +2713,6 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   
   
   
-  
-  
-  
-  
-  
   ####### Generate Table 1
   
   
@@ -3333,29 +3328,31 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   
   tableOne_compiled_all= tableOne_compiled_all[1:(nrow(tableOne_compiled_all)-2),]
   
- 
-  
   
   
   if (time == "phase_1") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
-         topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,TE_results_wilcox,Neuro_results_wilcox,Severity_results_wilcox,ARDs_results_wilcox,TE_results_wilcox2,Neuro_results_wilcox2,Severity_results_wilcox2,ARDs_results_wilcox2,TE_results_wilcox3,Neuro_results_wilcox3,Severity_results_wilcox3,ARDs_results_wilcox3,TE_results_wilcox4,Neuro_results_wilcox4,Severity_results_wilcox4,ARDs_results_wilcox4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
-         file = paste(siteid,"results_phase1.Rdata",sep="_"))
+         topic_diagnostics,topic_diagnostics2,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,TE_results_wilcox,Neuro_results_wilcox,Severity_results_wilcox,ARDs_results_wilcox,TE_results_wilcox2,Neuro_results_wilcox2,Severity_results_wilcox2,ARDs_results_wilcox2,TE_results_wilcox3,Neuro_results_wilcox3,Severity_results_wilcox3,ARDs_results_wilcox3,TE_results_wilcox4,Neuro_results_wilcox4,Severity_results_wilcox4,ARDs_results_wilcox4,beta_mat,beta_mat2,beta_mat3,beta_mat4,tableOne_compiled_all,
+         file = paste(paste(getProjectOutputDirectory(),"/",sep=""),paste(siteid,"results_phase1.RData",sep="_"),sep=""))
   }
   
   if (time == "phase_2") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
-         topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,TE_results_wilcox,Neuro_results_wilcox,Severity_results_wilcox,ARDs_results_wilcox,TE_results_wilcox2,Neuro_results_wilcox2,Severity_results_wilcox2,ARDs_results_wilcox2,TE_results_wilcox3,Neuro_results_wilcox3,Severity_results_wilcox3,ARDs_results_wilcox3,TE_results_wilcox4,Neuro_results_wilcox4,Severity_results_wilcox4,ARDs_results_wilcox4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
-         file = paste(siteid,"results_phase2.Rdata",sep="_"))
+         topic_diagnostics,topic_diagnostics2,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,TE_results_wilcox,Neuro_results_wilcox,Severity_results_wilcox,ARDs_results_wilcox,TE_results_wilcox2,Neuro_results_wilcox2,Severity_results_wilcox2,ARDs_results_wilcox2,TE_results_wilcox3,Neuro_results_wilcox3,Severity_results_wilcox3,ARDs_results_wilcox3,TE_results_wilcox4,Neuro_results_wilcox4,Severity_results_wilcox4,ARDs_results_wilcox4,beta_mat,beta_mat2,beta_mat3,beta_mat4,tableOne_compiled_all,
+         file = paste(paste(getProjectOutputDirectory(),"/",sep=""),paste(siteid,"results_phase2.RData",sep="_"),sep=""))
   }
   
   if (time == "all") {
     save(df_prop,df_num,df_prop2,df_num2,df_prop_Sex,df_prop_Sex2,df_prop_Severity,df_prop_Severity2,num_missing,prop_missing,num_missing2,prop_missing2,temporal,temporal_severe,temporal_nonsevere,longhaul_comb3,longhaul3,longhaul_comb7,longhaul7,shorthaul_comb,shorthaul_comb2,shorthaul,props_quant,props_quant2,props_M_quant,props_M_quant2,props_F_quant,props_F_quant2,props_S_quant,props_S_quant2,props_NS_quant,props_NS_quant2,props_S_quant3,props_S_quant4,props_NS_quant3,props_NS_quant4,props_S_quant5,props_NS_quant5,props_S_quant6,props_NS_quant6,props_S_quant7,props_NS_quant7,
-         topic_diagnostics,topicQuality,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,TE_results_wilcox,Neuro_results_wilcox,Severity_results_wilcox,ARDs_results_wilcox,TE_results_wilcox2,Neuro_results_wilcox2,Severity_results_wilcox2,ARDs_results_wilcox2,TE_results_wilcox3,Neuro_results_wilcox3,Severity_results_wilcox3,ARDs_results_wilcox3,TE_results_wilcox4,Neuro_results_wilcox4,Severity_results_wilcox4,ARDs_results_wilcox4,beta_mat,beta_mat2,beta_mat3,beta_mat4,labs,tableOne_compiled_all,
-         file = paste(siteid,"results_all.Rdata",sep="_"))
-  }
+         topic_diagnostics,topic_diagnostics2,TE_results,Severity_results,Neuro_results,ARDs_results,TE_results2,Severity_results2,Neuro_results2,ARDs_results2,TE_results3,Severity_results3,Neuro_results3,ARDs_results3,TE_results4,Severity_results4,Neuro_results4,ARDs_results4,TE_results_wilcox,Neuro_results_wilcox,Severity_results_wilcox,ARDs_results_wilcox,TE_results_wilcox2,Neuro_results_wilcox2,Severity_results_wilcox2,ARDs_results_wilcox2,TE_results_wilcox3,Neuro_results_wilcox3,Severity_results_wilcox3,ARDs_results_wilcox3,TE_results_wilcox4,Neuro_results_wilcox4,Severity_results_wilcox4,ARDs_results_wilcox4,beta_mat,beta_mat2,beta_mat3,beta_mat4,tableOne_compiled_all,
+         file = paste(paste(getProjectOutputDirectory(),"/",sep=""),paste(siteid,"results_all.RData",sep="_"),sep=""))
+   }
   
 }
      
+    
+    
+    
+
 
 
