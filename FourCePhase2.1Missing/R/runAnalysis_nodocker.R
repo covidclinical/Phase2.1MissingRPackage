@@ -1124,8 +1124,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   prop_greater = 0
   te_labs2 <- dat %>% 
     filter(days_since_admission < 100,
-           days_since_admission >= 0) %>% 
-    mutate(te = patient_num %in% unique(te_patients$patient_num))
+           days_since_admission >= 0)
   #Calculate correlation matrices between lab missing indicators for each time point
   sim_mat = matrix(rep(0),ncol(te_labs2)-4,ncol(te_labs2)-4)
   mat_list = list()
@@ -1200,8 +1199,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   prop_greater = 0
   te_labs2 <- dat %>% 
     filter(days_since_admission < 100,
-           days_since_admission >= 0) %>% 
-    mutate(te = patient_num %in% unique(te_patients$patient_num))
+           days_since_admission >= 0) 
   #Calculate correlation matrices between lab missing indicators for each time point
   sim_mat = matrix(rep(0),ncol(te_labs2)-4,ncol(te_labs2)-4)
   mat_list = list()
@@ -1275,8 +1273,7 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   prop_greater = 0
   te_labs2 <- dat %>% 
     filter(days_since_admission < 100,
-           days_since_admission >= 0) %>% 
-    mutate(te = patient_num %in% unique(te_patients$patient_num))
+           days_since_admission >= 0) 
   #Calculate correlation matrices between lab missing indicators for each time point
   sim_mat = matrix(rep(0),ncol(te_labs2)-4,ncol(te_labs2)-4)
   mat_list = list()
