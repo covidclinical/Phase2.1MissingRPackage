@@ -35,6 +35,7 @@
 #' @import(mSTEM)
 #' @import(MCMCpack)
 #' @import(kableExtra)
+#' @import(stats)
 
  
 runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-%y",time="all",siteid = "upenn") {
