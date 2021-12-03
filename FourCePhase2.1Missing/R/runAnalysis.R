@@ -35,6 +35,7 @@
 #' @import(mSTEM)
 #' @import(MCMCpack)
 #' @import(kableExtra)
+#' @import(stats)
 
 
  
@@ -2194,12 +2195,23 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   Neuro_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
   ARDs_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
+  TE_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$TE == TRUE],(theta[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Severity_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$severe == TRUE],(theta[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")])
+  Neuro_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$Neuro == TRUE],(theta[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  ARDs_results_wilcox <- try(lapply(1:K, function(x) wilcox.test((theta[,x])[missing_by_patient$ARDs == TRUE],(theta[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  
+                            
   
   TE_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
   Severity_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")]))
   Neuro_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
   ARDs_results2 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
+  TE_results_wilcox2 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$TE == TRUE],(theta2[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Severity_results_wilcox2 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$severe == TRUE],(theta2[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Neuro_results_wilcox2 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$Neuro == TRUE],(theta2[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  ARDs_results_wilcox2 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$ARDs == TRUE],(theta2[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+                             
   
   theta <- try(stmfit$theta)
   K = try(Modes(ind))
@@ -2551,11 +2563,21 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   Neuro_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
   ARDs_results3 <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
   
+  TE_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$TE == TRUE],(theta[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Severity_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$severe == TRUE],(theta[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Neuro_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$Neuro == TRUE],(theta[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  ARDs_results_wilcox3 <- try(lapply(1:K2, function(x) wilcox.test((theta[,x])[missing_by_patient$ARDs == TRUE],(theta[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  
   
   TE_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
   Severity_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$severe))[c("estimate","p.value","statistic","method")]))
   Neuro_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$Neuro))[c("estimate","p.value","statistic","method")]))
   ARDs_results4 <- try(lapply(1:K2, function(x) cor.test(theta2[, x], as.numeric(missing_by_patient$ARDs))[c("estimate","p.value","statistic","method")]))
+  
+  TE_results_wilcox4 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$TE == TRUE],(theta2[,x])[missing_by_patient$TE == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Severity_results_wilcox4 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$severe == TRUE],(theta2[,x])[missing_by_patient$severe == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  Neuro_results_wilcox4 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$Neuro == TRUE],(theta2[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
+  ARDs_results_wilcox4 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$ARDs == TRUE],(theta2[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
   
   
   theta <- try(stmfit$theta)
