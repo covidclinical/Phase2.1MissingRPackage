@@ -82,7 +82,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   )
   te_patients <- patient_obs %>%
     filter(
-      concept_type == "DIAG-ICD10",
+      concept_type == "DIAG-ICD10" | concept_type == "DIAG-ICD9",
       concept_code %in% thrombo_codes,
       days_since_admission >= 0
     )
@@ -1940,7 +1940,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   #Isolate patients with thrombotic events and remove the days_since_admission column. 
   thrombo_patients <- patient_obs %>%
     filter(
-      concept_type == "DIAG-ICD10",
+      concept_type == "DIAG-ICD10" | concept_type == "DIAG-ICD9",
       concept_code %in% thrombo_codes,
       days_since_admission >= 0
     ) %>%
@@ -1948,7 +1948,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     distinct()
   neuro_patients <- patient_obs %>%
     filter(
-      concept_type == "DIAG-ICD10",
+      concept_type == "DIAG-ICD10" | concept_type == "DIAG-ICD9",
       concept_code %in% neuro_codes,
       days_since_admission >= 0
     ) %>%
@@ -1956,7 +1956,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     distinct()
   ARDs_patients <- patient_obs %>%
     filter(
-      concept_type == "DIAG-ICD10",
+      concept_type == "DIAG-ICD10" | concept_type == "DIAG-ICD9",
       concept_code %in% ARDs_codes,
       days_since_admission >= 0
     ) %>%
