@@ -1925,7 +1925,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   
   
   ####### LDA Topic Modeling
-  
+  print('begin topic modeling')
   
   #Read in thrombotic icd codes. Add column "truncated code" for first three characters of each code. Extract unique truncated codes.
   thrombo_codes <- c("I74", "I75", "I76", "I21", "I22", "I23", "I26", "I27", "Z86", "I63", "I67", "I81", "I82","444","445",
@@ -2045,7 +2045,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   #Reduce dataframe to matrix with labs and values
   x_mat <- missing_by_patient[, labsPresent]
   
-  
+  print('data processed. Calculate exclusivity')
   
   exclusivity <- function(mod.out, M = 10, frexw = .7) {
     w <- frexw
@@ -2082,7 +2082,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   ARDs_results2 <- c()
   
                         
-                        
+  print('find K part 1')                      
   
   try(system.time(many_models <- data.frame(K = seq(2, 8, 1)) %>%
                 mutate(topic_model = furrr::future_map(K, ~ stm(
@@ -2124,6 +2124,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ux[tab == max(tab)]
   }
   try(Modes(ind))
+                      
+  print('plot diagnostics') 
   
   topic_diagnostics_plot = try(k_result %>%
     transmute(K,
@@ -2146,7 +2148,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ))
   topic_diagnostics_plot
   
-  
+  print('fit stm 1') 
   
   #Beta matrix contains log probabilities of labs in topics. Generate heat map of beta values for each lab.
   
@@ -2347,7 +2349,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   
   
   
-  
+  print('calculate exclusivity 2') 
   
   
   ## Repeat with 30 days
@@ -2450,7 +2452,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   ARDs_results4 <- c()
   
                         
-                        
+  print('get optimal k 2')                       
   
   try(system.time(many_models <- data.frame(K = seq(2, 8, 1)) %>%
                 mutate(topic_model = furrr::future_map(K, ~ stm(
@@ -2492,6 +2494,8 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ux[tab == max(tab)]
   }
   try(Modes(ind))
+                      
+  print('plot diagnostics')  
   
   topic_diagnostics_plot = try(k_result %>%
     transmute(K,
@@ -2514,7 +2518,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ))
   topic_diagnostics_plot
   
-  
+  print('stm fit 2')  
   
   #Beta matrix contains log probabilities of labs in topics. Generate heat map of beta values for each lab.
   
