@@ -44,7 +44,6 @@ submitAnalysis()
 For non-docker users:
 
 ```
-#If package stm is not already installed:
 install.packages('stm')
 library(stm)
 
