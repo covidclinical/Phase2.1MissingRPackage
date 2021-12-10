@@ -44,6 +44,10 @@ submitAnalysis()
 For non-docker users:
 
 ```
+#If package stm is not already installed:
+install.packages('stm')
+library(stm)
+
 devtools::install_github("https://github.com/covidclinical/Phase2.1MissingRPackage", subdir="FourCePhase2.1Missing", upgrade=FALSE)
 library(FourCePhase2.1Missing)
 
