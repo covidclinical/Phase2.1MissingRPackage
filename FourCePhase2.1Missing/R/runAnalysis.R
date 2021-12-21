@@ -143,7 +143,11 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     if (j == nrow(test_patient)) {
       valid_days[i] = test_patient$days_since_admission[j]
     }else{
+     if (test_patient$in_hospital[1] == 0){
+      valid_days[i] = 0
+     }else{
     valid_days[i] = test_patient$days_since_admission[(j-1)]
+    }
     }
   }
   
