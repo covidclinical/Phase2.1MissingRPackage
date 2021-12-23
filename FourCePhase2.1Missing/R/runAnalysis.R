@@ -2164,7 +2164,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   
   #Beta matrix contains log probabilities of labs in topics. Generate heat map of beta values for each lab.
   
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
                       
   K <- try(Modes(ind)[1])
   }
@@ -2174,7 +2174,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   stmfit <- try(stm(x_dfm, K = K, verbose = FALSE, init.type = "Spectral", seed = TRUE))
   }
   stmfit2 <- try(stm(x_dfm, K = K2, verbose = FALSE, init.type = "Spectral", seed = TRUE))
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
   stmfit_beta <- try(stmfit$beta)
   }
   stmfit_beta2 <- try(stmfit2$beta)
