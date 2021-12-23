@@ -2476,7 +2476,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   Neuro_results4 <- c()
   ARDs_results4 <- c()
 
-  TE_results_wilcox3 <- = c()
+  TE_results_wilcox3 <- c()
   Severity_results_wilcox3 <- c()
   Neuro_results_wilcox3 <- c()
   ARDs_results_wilcox3 <- c()
