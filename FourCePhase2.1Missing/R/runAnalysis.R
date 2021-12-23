@@ -2170,7 +2170,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   }
   K2  = 5
 
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
   stmfit <- try(stm(x_dfm, K = K, verbose = FALSE, init.type = "Spectral", seed = TRUE))
   }
   stmfit2 <- try(stm(x_dfm, K = K2, verbose = FALSE, init.type = "Spectral", seed = TRUE))
@@ -2179,7 +2179,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   }
   stmfit_beta2 <- try(stmfit2$beta)
   
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
   K=try(Modes(ind)[1])
   beta_mat <- try(exp(stmfit$beta$logbeta[[1]]))
   colnames(beta_mat) <- try(stmfit$vocab)
@@ -2200,7 +2200,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
          fill=colorRampPalette(brewer.pal(8, "Blues"))(3)))
   labs = try(stmfit2$vocab)
   
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
   theta <- try(stmfit$theta)
   }
   theta2 <- try(stmfit2$theta)
@@ -2211,7 +2211,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   }
   ## Pairs of variables for which we want correlations
 
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
   theta <- try(stmfit$theta)
   K = try(Modes(ind)[1])
   TE_results <- try(lapply(1:K, function(x) cor.test(theta[, x], as.numeric(missing_by_patient$TE))[c("estimate","p.value","statistic","method")]))
@@ -2236,7 +2236,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   Neuro_results_wilcox2 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$Neuro == TRUE],(theta2[,x])[missing_by_patient$Neuro == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
   ARDs_results_wilcox2 <- try(lapply(1:K2, function(x) wilcox.test((theta2[,x])[missing_by_patient$ARDs == TRUE],(theta2[,x])[missing_by_patient$ARDs == FALSE],conf.int=TRUE,exact=TRUE)[c("p.value","estimate")]))
                              
-  if (siteid != "UMICH){
+  if (siteid != "UMICH"){
   theta <- try(stmfit$theta)
   K = try(Modes(ind))
   #TE 
