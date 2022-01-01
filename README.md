@@ -46,6 +46,8 @@ For non-docker users:
 ```
 install.packages('stm')
 library(stm)
+devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
+library(Phase2.1Data)
 
 devtools::install_github("https://github.com/covidclinical/Phase2.1MissingRPackage", subdir="FourCePhase2.1Missing", upgrade=FALSE)
 library(FourCePhase2.1Missing)
