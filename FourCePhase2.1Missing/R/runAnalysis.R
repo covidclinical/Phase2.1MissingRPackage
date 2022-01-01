@@ -43,6 +43,7 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
   for (r_file in list.files('R', full.names = TRUE, pattern = '.R$')) source(r_file)
   for (r_file in list.files('public-data', full.names = TRUE, pattern = '.csv$')) readr::read_csv(r_file)
   library(stm)
+  library(FourCePhase2.1Missing)
  
   devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
   data_dir <- FourCePhase2.1Data::getInputDataDirectoryName()
