@@ -72,12 +72,21 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
   thrombo_codes <- c("I74", "I75", "I76", "I21", "I22", "I23", "I26", "I27", "Z86", "I63", "I67", "I81", "I82","444","445",
 "410","415","V12","434","437","452","453","D65","P60","286","776")
   #Extract information for patients with codes for thrombotic events
-  patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv"),
-                               col_types = list(
-                                 patient_num = readr::col_character(),
-                                 value = readr::col_double()
-                               ),
-                               na = "-999")
+  if (siteid == "BIDMC") {
+     patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv"),
+                                 col_types = list(
+                                   patient_num = readr::col_double(),
+                                   value = readr::col_double()
+                                 ),
+                                 na = "-999")
+  }else{
+    patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv"),
+                                 col_types = list(
+                                   patient_num = readr::col_character(),
+                                   value = readr::col_double()
+                                 ),
+                                 na = "-999")
+  }
   te_patients <- patient_obs %>%
     filter(
       concept_type == "DIAG-ICD10",
