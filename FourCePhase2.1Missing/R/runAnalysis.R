@@ -77,21 +77,15 @@ runAnalysis <- function(dateFormat="%d-%b-%y",time="all",siteid="penn") {
 "410","415","V12","434","437","452","453","D65","P60","286","776")
   #Extract information for patients with codes for thrombotic events
  
-  if (siteid == "BIDMC") {
-     patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv"),
-                                 col_types = list(
-                                   patient_num = readr::col_double(),
-                                   value = readr::col_double()
-                                 ),
-                                 na = "-999")
-  }else{
-    patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv"),
+patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv"),
                                  col_types = list(
                                    patient_num = readr::col_character(),
                                    value = readr::col_double()
                                  ),
                                  na = "-999")
-  }
+ 
+patient_obs$patient_num <- as.character(patient_obs$patient_num)
+
   te_patients <- patient_obs %>%
     filter(
       concept_type == "DIAG-ICD10" | concept_type == "DIAG-ICD9",
