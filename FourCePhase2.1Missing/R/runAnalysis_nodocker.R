@@ -46,6 +46,8 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
 
  
   my_dir = data_dir
+ 
+ if (siteid != "VA1" && siteid != "VA2" && siteid != "VA3" && siteid != "VA4" && siteid != "VA5"){
   
   demo_raw <-
   readr::read_csv(
@@ -61,6 +63,9 @@ runAnalysis_nodocker <- function(data_dir = "~/4ceData/Input",dateFormat="%d-%b-
       last_discharge_date
     )
   )
+  }else{
+  demo_raw = demographics
+  }
   
   obs_raw <-
     readr::read_csv(
