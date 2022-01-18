@@ -79,6 +79,9 @@ patient_obs <- readr::read_csv(file.path(data_dir, "LocalPatientObservations.csv
                                    value = readr::col_double()
                                  ),
                                  na = "-999")
+ 
+patient_obs$patient_num <- as.character(patient_obs$patient_num)
+ 
   te_patients <- patient_obs %>%
     filter(
       concept_type == "DIAG-ICD10",
