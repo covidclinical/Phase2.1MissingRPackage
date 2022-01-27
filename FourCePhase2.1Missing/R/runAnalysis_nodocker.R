@@ -2373,6 +2373,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   err_svms <- vector("numeric")
   all_evals <- list()
   #filter out observations with days since admission >= a threshold (upper_day, in this case 9 days) and days since admission  <= 0. Take out the days_since_admission column. Obtain number of lab values for each TE patient.
+  if (siteid != "penn"){
   missing_by_patient <- patient_obs_wide %>%
     filter(
       days_since_admission <= upper_day2, # 30-day window
@@ -2429,7 +2430,63 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
   #Reduce dataframe to matrix with labs and values
   x_mat <- missing_by_patient[, labsPresent]
   
-  
+  }else{
+   missing_by_patient <- patient_obs_wide %>%
+    filter(
+      days_since_admission <= upper_day2, # 30-day window
+      days_since_admission >= 0
+    ) %>%
+    group_by(patient_num) %>%
+    summarise(across(-days_since_admission, function(x) {
+      sum(is.na(x))
+    })) %>%
+    left_join(demo_df, by = "patient_num")
+  ct = 0
+  if ("Troponin_high" %in% colnames(missing_by_patient)){
+    if ("Troponin_normal" %in% colnames(missing_by_patient)){
+      ct = ct + 1
+    }else{
+      colnames(missing_by_patient)[which(colnames(missing_by_patient)=="Troponin_high")] <- "Troponin"
+    }
+  }
+  if ("Troponin_normal" %in% colnames(missing_by_patient)) {
+    if ("Troponin_high" %in% colnames(missing_by_patient)) {
+      missing_by_patient$Troponin = missing_by_patient$Troponin_normal +   missing_by_patient$Troponin_high
+    }else{
+      colnames(missing_by_patient)[which(colnames(missing_by_patient)=="Troponin_normal")] <- "Troponin"
+    }
+  }
+  if ("DDU" %in% colnames(missing_by_patient)){
+    if ("FEU" %in% colnames(missing_by_patient)) {
+      ct = ct + 1
+    }else{
+      colnames(missing_by_patient)[which(colnames(missing_by_patient)=="DDU")] <- "D_Dimer"
+    }
+  }
+  if ("FEU" %in% colnames(missing_by_patient)) {
+    if ("D-Dimer" %in% colnames(missing_by_patient)) {
+      missing_by_patient$D_Dimer = missing_by_patient$FEU +   missing_by_patient$D_Dimer
+    }else{
+      colnames(missing_by_patient)[which(colnames(missing_by_patient)=="FEU")] <- "D_Dimer"
+    }
+  }
+  drops = c("Troponin_high","Troponin_normal","FEU","DDU")
+  missing_by_patient= missing_by_patient[,!(names(missing_by_patient) %in% drops)]
+  allLabs <- c("Fibrinogen","Procalcitonin","D_Dimer","Troponin","CRP","Ferritin","LDH","Lymphocyte","PT","Albumin","Neutrophil","AST","ALT","Bilirubin","Leukocytes","Creatinine")
+  labsPresent <- allLabs[ allLabs %in% colnames(missing_by_patient)]
+  lab_names = labsPresent
+  #Obtain total number of observations per lab for TE patients
+  uniq_vals <-
+    apply(missing_by_patient, 2, function(x) {
+      length(unique(x))
+    })
+  #Remove patients that have no lab values
+  missing_by_patient <- missing_by_patient[, uniq_vals > 1] %>%
+    mutate(sum_labs = rowSums(across(all_of(lab_names)))) %>% 
+    filter(sum_labs > 0)
+  #Reduce dataframe to matrix with labs and values
+  x_mat <- missing_by_patient[, labsPresent]
+   }
   
   exclusivity <- function(mod.out, M = 10, frexw = .7) {
     w <- frexw
