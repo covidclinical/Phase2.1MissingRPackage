@@ -2438,7 +2438,7 @@ lab_bounds$short_name = c("ALT","Albumin","AST","Bilirubin","CRP","Creatinine","
     ) %>%
     group_by(patient_num) %>%
     summarise(across(-days_since_admission, function(x) {
-      sum(is.na(x))
+      sum(!is.na(x))
     })) %>%
     left_join(demo_df, by = "patient_num")
   ct = 0
